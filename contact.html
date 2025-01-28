@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+        <link rel="manifest" href="assets/favicon/site.webmanifest">
+        <meta property="og:title" content="Contattami - Riccardo Pinzuti UX/UI Designer">
+        <meta property="og:description" content="Hai un progetto in mente? Parliamone insieme">
+        <meta property="og:image" content="url sito...riccardo-pinzuti-foto-profilo.jpg">
+        <title>Riccardo Pinzuti Ux Ui Designer</title>
+        <!-- Preload Fonts -->
+        <link rel="preload" href="assets/fonts/Mona-Sans.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="assets/fonts/Hubot-Sans.woff2" as="font" type="font/woff2" crossorigin>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- CSS -->
+        <link rel="stylesheet" href="assets/css/style.css">
+    </head>
+    <body class="dark-theme">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">riccardopinzuti</a>
+                <!-- Aggiungi il bottone hamburger -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Wrappa i link in un div collassabile -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <div class="navbar-nav ms-auto">
+                        <a class="nav-link" href="index.html">Home</a>
+                        <a class="nav-link" href="/about.html">Chi sono</a>
+                        <a class="nav-link" href="#">Contatti</a>
+                    </div>
+                </div>
+            </div>
+        </nav>    
+<section class="contact-section py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Colonna sinistra - Info -->
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <h1 class="display-4 mb-4">Contact me</h1>
+                <p class="mb-5">Se hai un progetto o un'opportunità di collaborazione di cui vorresti parlare, o semplicemente vuoi salutarmi, scrivimi!</p>
+                
+                <div class="contact-info">
+
+                </div>
+            </div>
+
+            <!-- Colonna destra - Form -->
+            <div class="col-lg-7 offset-lg-1">
+                <form id="contactForm" onsubmit="return false;">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="name">NOME</label>
+                            <input type="text" id="name" class="form-control" placeholder="Nome completo" required>
+                          </div>
+                          <div class="col-md-6 mb-4">
+                            <label for="email">EMAIL</label>
+                            <input type="email" id="email" class="form-control" placeholder="Indirizzo email" required>
+                          </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="object">OGGETTO</label>
+                        <input type="text" id="object" class="form-control" placeholder="Oggetto" required>
+                      </div>
+                      <div class="mb-4">
+                        <label for="message">MESSAGGIO</label>
+                        <textarea id="message" class="form-control" rows="6" placeholder="Scrivi il tuo messaggio qui..." required></textarea>
+                      </div>
+
+                    <button type="submit" class="btn btn-primary">Invia</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal di Successo -->
+
+<div class="modal fade" id="successModal">
+    <div class="modal-dialog">
+      <div class="modal-content bg-dark">
+        <div class="modal-body text-center p-5">
+          <div class="text-success mb-3">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+          </div>
+          <h4 class="modal-title font-hubot mb-3">Messaggio inviato con successo!</h4>
+          <button class="btn btn-primary" data-bs-dismiss="modal">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal di Errore -->
+
+  <div class="modal fade" id="errorModal">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark">
+      <div class="modal-body text-center p-5">
+        <div class="text-danger mb-3">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </div>
+        <h4 class="modal-title font-hubot mb-3">Errore nell'invio del messaggio</h4>
+        <p class="font-mona text-gray mb-4">Riprova più tardi</p>
+        <button class="btn btn-primary" data-bs-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <!-- Left Side -->
+            <div class="footer-logo">
+                <a href="index.html">riccardopinzuti</a>
+            </div>
+            
+            <!-- Right Side Navigation -->
+            <div class="footer-nav-wrapper">
+                <nav class="footer-nav">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">Su di me</a></li>
+                        <li><a href="#">Contatti</a></li>
+                    </ul>
+                </nav>
+                <a href="https://www.linkedin.com/in/riccardo-pinzuti" class="linkedin-link" target="_blank">
+                    LinkedIn
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 17l9.2-9.2M17 17V8h-9" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="footer-bottom">
+            <span class="copyright">© All right reserved by riccardopinzuti 2025</span>
+            <a href="#" class="privacy-link">Privacy policy</a>
+        </div>
+    </div>
+</footer>
+
+    <!-- Script Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        emailjs.init("CnIRVtdwQp61tMxW-");
+     </script>
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

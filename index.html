@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+        <link rel="manifest" href="assets/favicon/site.webmanifest">
+        <meta property="og:title" content="Riccardo Pinzuti - UX/UI Designer">
+        <meta property="og:description" content="Portfolio di Riccardo Pinzuti, UX/UI Designer freelance">
+        <meta property="og:image" content="immagine web profilo">
+        <title>Riccardo Pinzuti Ux Ui Designer</title>
+        <!-- Preload Fonts -->
+        <link rel="preload" href="assets/fonts/Mona-Sans.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="assets/fonts/Hubot-Sans.woff2" as="font" type="font/woff2" crossorigin>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- CSS -->
+        <link rel="stylesheet" href="assets/css/style.css">
+    </head>
+<body class="dark-theme">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">riccardopinzuti</a>
+            <!-- Aggiungi il bottone hamburger -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Wrappa i link in un div collassabile -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" href="about.html">Chi sono</a>
+                    <a class="nav-link" href="contact.html">Contatti</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+                <div class="col-lg-8">
+                    <h1 class="display-4 text-white">
+                        Ciao, sono Riccardo 
+                        <span class="profile-image">
+                            <img src="assets/images/riccardo-pinzuti-foto-profilo.jpg" alt="Riccardo Pinzuti">
+                        </span>
+                        un UX/UI Designer freelance. Dai vita alle tue idee digitali
+                    </h1>
+                    <div class="mt-4">
+                        <a href="/contact.html">
+                        <button class="btn btn-primary btn-lg">Parliamo del tuo progetto</button>
+                        </a>
+                    </div>
+                </div>
+        </div>
+    </section>
+
+    <!-- Featured Work Section -->
+<section class="featured-work py-5">
+    <div class="container">
+        <h2 class="section-title mb-5">Progetti selezionati</h2>
+        <div class="row g-4">
+            <!-- Project Card 1 -->
+            <div class="col-md-6">
+                <a href="/projects/strategia-social-brand.html" class="project-card">
+                    <div class="project-image">
+                        <img src="/assets/images/projects/social-brand-strategy-cover.jpg" alt="Anteprima progetto di strategia e design per identità social brand">
+                        <div class="project-overlay"></div>
+                    </div>
+                    <div class="project-info mt-3">
+                        <h3 class="project-title">Branding e Identità Visiva</h3>
+                        <p class="project-description">Strategia e design per l'identità social di un brand</p>
+                        <span class="project-link">
+                            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none">
+                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Project Card 2 -->
+            <div class="col-md-6">
+                <a href="/projects/il-vestito-verde-copywriting.html" class="project-card">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="assets/images/projects/progetto-copywriting-copertina-new-ok.jpg" alt="Project Name" class="img-fluid">
+                    </div>
+                    <div class="project-info mt-3">
+                        <h3 class="project-title">Moda che Fa la Differenza: Il Vestito Verde</h3>
+                        <p class="project-description">Strategia di copywriting per il Fair Trade nella moda sostenibile</p>
+                        <a href="/projects/il-vestito-verde-copywriting.html" class="project-link">
+                            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none">
+                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                </a>
+            </div>
+            <!-- Project Card 3 -->
+<div class="col-md-6">
+    <a href="/projects/discovery-ux-research.html" class="project-card">
+    <div class="project-card">
+        <div class="project-image">
+            <img src="assets/images/projects/progetto-discovery-copertina-new.jpg" alt="Project Name" class="img-fluid">
+        </div>
+        <div class="project-info mt-3">
+            <h3 class="project-title">Discovery & UX Research</h3>
+            <p class="project-description">Analisi e ottimizzazione dell'esperienza utente per un e-commerce di moda sostenibile</p>
+            <a href="/projects/discovery-ux-research.html" class="project-link">
+                <svg class="arrow-icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+    </a>
+</div>
+
+<!-- Project Card 4 -->
+<div class="col-md-6">
+    <a href="/projects/accessibilita-ux-research.html" class="project-card">
+    <div class="project-card">
+        <div class="project-image">
+            <img src="assets/images/projects/progetto-accessibilita-copertina-new.jpg" alt="Project Name" class="img-fluid">
+        </div>
+        <div class="project-info mt-3">
+            <h3 class="project-title">Accessibilità & UX</h3>
+            <p class="project-description">Analisi e ottimizzazione dell'esperienza utente per un web inclusivo</p>
+            <a href="/projects/accessibilita-ux-research.html" class="project-link">
+                <svg class="arrow-icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+    </a>
+</div>
+
+<!-- Project Card 5 -->
+<div class="col-md-6">
+    <a href="/projects/wireframing-ux-design.html" class="project-card">
+    <div class="project-card">
+        <div class="project-image">
+            <img src="assets/images/projects/progetto-wireframing-copertina-new.jpg" alt="Project Name" class="img-fluid">
+        </div>
+        <div class="project-info mt-3">
+            <h3 class="project-title">Wireframing & UX Design</h3>
+            <p class="project-description">Design e prototipazione dell'interfaccia per un'esperienza fluida e intuitiva</p>
+            <a href="/projects/wireframing-ux-design.html" class="project-link">
+                <svg class="arrow-icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+    </a>
+</div>
+
+<!-- Project Card 6 -->
+<div class="col-md-6">
+    <a href="/projects/user-interface-design.html" class="project-card">
+    <div class="project-card">
+        <div class="project-image">
+            <img src="assets/images/projects/progetto-user-interface-copertina-new.jpg" alt="Project Name" class="img-fluid">
+        </div>
+        <div class="project-info mt-3">
+            <h3 class="project-title">UI Design & Interazioni</h3>
+            <p class="project-description">Design system, micro-interazioni e interfacce responsive</p>
+            <a href="/projects/user-interface-design.html" class="project-link">
+                <svg class="arrow-icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+    </a>
+</div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills -->
+<section class="results-section">
+    <div class="container">
+        <h2 class="section-title mb-5">Le mie specializzazioni</h2>
+</section>        
+<div class="carousel-container">
+    <div class="carousel">
+        <div class="carousel-item">
+            <div class="carousel-content">
+                <span class="percentage">UX Design</span>
+                <span class="description">Wireframing, Prototyping,<br>Discovery</span>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="carousel-content">
+                <span class="percentage">Coding</span>
+                <span class="description">HTML, CSS</span>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="carousel-content">
+                <span class="percentage">Contenuti</span>
+                <span class="description">Scrittura, Grafica</span>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="carousel-content">
+                <span class="percentage">UX Design</span>
+                <span class="description">Wireframing, Prototyping,<br>Discovery</span>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="carousel-content">
+                <span class="percentage">Coding</span>
+                <span class="description">HTML, CSS</span>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="carousel-content">
+                <span class="percentage">Contenuti</span>
+                <span class="description">Scrittura, Grafica</span>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="carousel-content">
+                <span class="percentage">UX Design</span>
+                <span class="description">Wireframing, Prototyping,<br>Discovery</span>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="carousel-content">
+                <span class="percentage">Coding</span>
+                <span class="description">HTML, CSS</span>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="carousel-content">
+                <span class="percentage">Contenuti</span>
+                <span class="description">Scrittura, Grafica</span>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<!-- CTA Section -->
+<section class="cta-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="cta-title">Hai un progetto in mente?<br>Realizziamolo insieme</h2>
+            <div class="mt-4">
+                <a href="/contact.html">
+                <button class="btn btn-primary btn-lg">Iniziamo a collaborare</button>
+            </a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- FAQ Section -->
+<section class="faq-section py-5">
+    <div class="container">
+        <h2 class="section-title mb-5">Domande frequenti</h2>
+        
+        <div class="accordion" id="faqAccordion">
+            <!-- FAQ Item 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        Come si svolge il processo di lavoro?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Il processo inizia con una call conoscitiva gratuita dove ascolto le tue esigenze. Seguono la fase di ricerca e analisi, 
+                        la creazione di wireframe e prototipi, fino alla consegna del progetto finale. Ogni fase prevede momenti di feedback e 
+                        revisione per garantire che il risultato soddisfi pienamente le tue aspettative.
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Item 2 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        Che tipologie di progetti realizzi?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Mi occupo di progetti di UX/UI design per siti web, applicazioni mobile e piattaforme digitali. Dal restyling di interfacce 
+                        esistenti alla creazione di nuovi prodotti digitali, ogni progetto viene sviluppato con attenzione alla user experience e 
+                        agli obiettivi di business.
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Item 3 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                        Come vengono gestiti tempistiche e pagamenti?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Dopo un'attenta analisi del progetto, definisco un preventivo dettagliato e una timeline realistica. Il lavoro viene 
+                        suddiviso in fasi precise con pagamenti progressivi. La durata media di un progetto varia da 4 a 12 settimane, 
+                        in base alla complessità e alle tue esigenze specifiche.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <!-- Left Side -->
+            <div class="footer-logo">
+                <a href="index.html">riccardopinzuti</a>
+            </div>
+            
+            <!-- Right Side Navigation -->
+            <div class="footer-nav-wrapper">
+                <nav class="footer-nav">
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="about.html">Su di me</a></li>
+                        <li><a href="contact.html">Contatti</a></li>
+                    </ul>
+                </nav>
+                <a href="https://www.linkedin.com/in/riccardo-pinzuti" class="linkedin-link" target="_blank">
+                    LinkedIn
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 17l9.2-9.2M17 17V8h-9" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="footer-bottom">
+            <span class="copyright">© All right reserved by riccardopinzuti 2025</span>
+            <a href="#" class="privacy-link">Privacy policy</a>
+        </div>
+    </div>
+</footer>
+
+    <!-- Script Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
