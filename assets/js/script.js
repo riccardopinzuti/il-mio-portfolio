@@ -29,16 +29,23 @@ window.addEventListener('resize', adjustCarouselWidth);
 // Codice EmailJS
 document.getElementById('contactForm')?.addEventListener('submit', function(event) {
     event.preventDefault();
+    
+    if (!grecaptcha.getResponse()) {
+        alert('Per favore, completa il captcha');
+        return;
+    }
 
     const templateParams = {
         name: document.getElementById('name').value,
         object: document.getElementById('object').value,
         email: document.getElementById('email').value,
-        message: document.getElementById('message').value
+        message: document.getElementById('message').value,
+        'g-recaptcha-response': grecaptcha.getResponse()
     };
 
     emailjs.send('service_e950c5w', 'template_z7vy82d', templateParams)
         .then(() => {
+            grecaptcha.reset();
             new bootstrap.Modal(document.getElementById('successModal')).show();
         })
         .catch(() => {
