@@ -28,8 +28,6 @@ window.addEventListener('resize', adjustCarouselWidth);
 
 
 // Codice EmailJS
-emailjs.init('CnIRVtdwQp61tMxW-');
-
 document.getElementById('contactForm')?.addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -54,6 +52,10 @@ document.getElementById('contactForm')?.addEventListener('submit', function(even
 
 // Gestione immagini
 document.addEventListener('DOMContentLoaded', () => {
+    const myModal = new bootstrap.Modal(document.getElementById('imageModal'), {
+        keyboard: true
+    });
+    
     const images = document.querySelectorAll('.process-image img');
     const modalImg = document.getElementById('modalImage');
     const imageModal = document.getElementById('imageModal');
