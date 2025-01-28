@@ -1,5 +1,4 @@
 // Codice Carosello Skills
-
 const carousel = document.querySelector('.carousel');
 const carouselItems = document.querySelectorAll('.carousel-item');
 
@@ -31,15 +30,14 @@ window.addEventListener('resize', adjustCarouselWidth);
 document.getElementById('contactForm')?.addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const params = {
+    const templateParams = {
         name: document.getElementById('name').value,
         object: document.getElementById('object').value,
         email: document.getElementById('email').value,
         message: document.getElementById('message').value
-      };
-    
+    };
 
-    emailjs.sendForm('service_e950c5w', 'template_z7vy82d', this)
+    emailjs.send('service_e950c5w', 'template_z7vy82d', templateParams)
         .then(() => {
             new bootstrap.Modal(document.getElementById('successModal')).show();
         })
