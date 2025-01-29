@@ -27,32 +27,37 @@ window.addEventListener('resize', adjustCarouselWidth);
 
 
 // Codice EmailJS
-document.getElementById('contactForm')?.addEventListener('submit', function(event) {
-    event.preventDefault();
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('contactForm');
     
-    if (!grecaptcha.getResponse()) {
-        alert('Per favore, completa il captcha');
-        return;
-    }
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const recaptchaResponse = grecaptcha.getResponse();
+        if (!recaptchaResponse) {
+            alert('Per favore, completa il captcha');
+            return;
+        }
 
-    const templateParams = {
-        name: document.getElementById('name').value,
-        object: document.getElementById('object').value,
-        email: document.getElementById('email').value,
-        message: document.getElementById('message').value,
-        'g-recaptcha-response': grecaptcha.getResponse()
-    };
+        const templateParams = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            object: document.getElementById('object').value,
+            message: document.getElementById('message').value,
+            'g-recaptcha-response': recaptchaResponse
+        };
 
-    emailjs.send('service_e950c5w', 'template_z7vy82d', templateParams)
-        .then(() => {
-            grecaptcha.reset();
-            new bootstrap.Modal(document.getElementById('successModal')).show();
-        })
-        .catch(() => {
-            new bootstrap.Modal(document.getElementById('errorModal')).show();
-        });
+        emailjs.send('service_e950c5w', 'template_z7vy82d', templateParams)
+            .then(function() {
+                grecaptcha.reset();
+                new bootstrap.Modal(document.getElementById('successModal')).show();
+                form.reset();
+            })
+            .catch(function() {
+                new bootstrap.Modal(document.getElementById('errorModal')).show();
+            });
+    });
 });
-
 
 
 // Gestione immagini
