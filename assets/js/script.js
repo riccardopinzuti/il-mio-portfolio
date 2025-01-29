@@ -32,24 +32,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        
-        const recaptchaResponse = grecaptcha.getResponse();
-        if (!recaptchaResponse) {
-            alert('Per favore, completa il captcha');
-            return;
-        }
 
         const templateParams = {
             name: document.getElementById('name').value,
             email: document.getElementById('email').value,
             object: document.getElementById('object').value,
-            message: document.getElementById('message').value,
-            'g-recaptcha-response': recaptchaResponse
+            message: document.getElementById('message').value
         };
 
         emailjs.send('service_e950c5w', 'template_z7vy82d', templateParams)
             .then(function() {
-                grecaptcha.reset();
                 new bootstrap.Modal(document.getElementById('successModal')).show();
                 form.reset();
             })
