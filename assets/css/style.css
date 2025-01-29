@@ -653,6 +653,10 @@ body.dark-theme {
     .featured-work {
         padding: 4rem 0;
     }
+    
+    .results-section .section-title {
+        font-size: 36px;
+    }
 
     .cta-section {
         padding: 6rem 0;
