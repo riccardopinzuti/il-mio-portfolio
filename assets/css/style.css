@@ -349,6 +349,10 @@ body.dark-theme {
         0% { transform: translateX(0); }
         100% { transform: translateX(calc(-100% + 90vw)); } 
     }
+
+    .results-section .section-title {
+        font-size: 36px;
+    }
 }
 
 /* CTA Section */
