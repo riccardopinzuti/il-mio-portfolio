@@ -150,6 +150,14 @@ body.dark-theme {
     }
 }
 
+@media (max-width: 576px) {
+    .hero-section h1.display-4 {
+        font-size: 1.25rem;  
+        line-height: 1.2;   
+        padding: 0 1rem;   
+    }
+}
+
 /* Featured Work Section */
 .featured-work {
     padding: 6rem 0;
@@ -700,65 +708,14 @@ body.dark-theme {
 
 
 /* Hero Section Mobile */
-    .hero-section h1.display-4 {
-        font-size: 44px;  
-    }
-
-    /* Featured Work Mobile */
-    .featured-work .section-title {
-        font-size: 36px;  
-    }
-
-    .project-title {
-        font-size: 24px;  
-    }
-
-    .project-description {
-        font-size: 16px;  
-    }
-
-    /* CTA Section Mobile */
-    .cta-title {
-        font-size: 44px;  
-    }
-
-    /* FAQ Section Mobile */
-    .faq-section .section-title {
-        font-size: 36px;  
-    }
-
-    .accordion-button {
-        font-size: 20px;  
-    }
-
-    .accordion-body {
-        font-size: 16px;  
-    }
-
-    /* Footer Mobile */
-    .footer-logo a {
-        font-size: 32px;  
-    }
-
-    .footer-nav ul li a,
-    .linkedin-link {
-        font-size: 20px;  
-    }
-
-    .footer-bottom .copyright,
-    .footer-bottom .privacy-link {
-        font-size: 16px;  
-    }
-    
-
-
-    /* Hero Section Mobile */
-
+@media (max-width: 991.98px) {
     .hero-section {
         padding: 3rem 0 4rem;  
     }
+
     .hero-section h1.display-4 {
-        font-size: 44px;  
+        font-size: 38px;  
+        line-height: 1.2;
     }
 
     /* Featured Work Mobile */
@@ -776,7 +733,7 @@ body.dark-theme {
 
     /* CTA Section Mobile */
     .cta-title {
-        font-size: 44px;  
+        font-size: 38px;  
     }
 
     /* FAQ Section Mobile */
@@ -806,6 +763,7 @@ body.dark-theme {
     .footer-bottom .privacy-link {
         font-size: 16px;  
     }
+}
 
 
 
