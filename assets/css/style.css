@@ -135,18 +135,18 @@ body.dark-theme {
 @media (max-width: 768px) {
     /* Hero section ridimensionata */
     .hero-section {
-        padding: 4rem 0;  /* Ridotto da 8rem */
+        padding: 4rem 0;  
     }
 
     .hero-section h1.display-4 {
-        font-size: 2rem;  /* Ridotto da 64px */
+        font-size: 1.5rem;  
         line-height: 1.3;
     }
 
     /* CTA button più compatto */
     .btn-primary {
-        padding: 0.75rem 1.5rem;  /* Ridotto da 1rem 2.5rem */
-        font-size: 1rem;  /* Ridotto da 24px */
+        padding: 0.75rem 1.5rem;  
+        font-size: 1rem;  
     }
 }
 
@@ -374,18 +374,18 @@ body.dark-theme {
 
 @media (max-width: 768px) {
     .cta-section {
-        padding: 4rem 0;  /* Ridotto da 8rem */
-        margin: 4rem 0 2rem;  /* Ridotto da 8rem 0 4rem */
+        padding: 4rem 0;  
+        margin: 4rem 0 2rem;  
     }
 
     .cta-title {
-        font-size: 2rem;  /* Ridotto da 80px */
+        font-size: 1.75rem;  
         line-height: 1.3;
     }
 
     .cta-section .btn-primary {
-        font-size: 1rem;  /* Ridotto da 24px */
-        padding: 0.75rem 1.5rem;  /* Ridotto da 1.2rem 3rem */
+        font-size: 1rem;  
+        padding: 0.75rem 1.5rem;  
     }
 }
 
