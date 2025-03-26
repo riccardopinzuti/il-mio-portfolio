@@ -70,3 +70,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+
+
+//JavaScript per il Banner Cookie
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Verifica se il cookie è già stato accettato
+    const cookieAccepted = localStorage.getItem('cookieAccepted');
+    
+    if (!cookieAccepted) {
+        // Mostra il banner dopo un breve ritardo
+        setTimeout(function() {
+            document.getElementById('cookieBanner').style.display = 'block';
+        }, 1000);
+    }
+    
+    // Gestione del click sul pulsante di accettazione
+    document.getElementById('acceptCookies').addEventListener('click', function() {
+        localStorage.setItem('cookieAccepted', 'true');
+        document.getElementById('cookieBanner').style.display = 'none';
+    });
+});
