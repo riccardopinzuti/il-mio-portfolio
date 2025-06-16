@@ -6,8 +6,6 @@
     <title>Preventivo Grafico</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- html2pdf.js CDN per la generazione PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsIDXPi/mEkNrCz/LZK6jD/U6P5S2y+D9I4y0x9G4eE4W2jPz1WkS1g/X8p3jF/F4O3b3f2k/F9l3/G3q3g+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- PWA Manifest Link -->
     <link rel="manifest" href="/manifest.json">
@@ -35,42 +33,6 @@
         input[type="number"] {
             -moz-appearance: textfield; /* Firefox */
         }
-
-        /* Stili specifici per il contenuto che andrà nel PDF per un aspetto migliore */
-        /* Applicati all'elemento #quote-content-to-pdf */
-        .pdf-content-style {
-            background-color: #ffffff; /* Sfondo bianco per il contenuto del PDF */
-            border-radius: 1rem; /* Bordo arrotondato */
-            overflow: hidden;
-        }
-        .pdf-content-style .font-bold { font-weight: 700; }
-        .pdf-content-style .text-sm { font-size: 0.875rem; }
-        .pdf-content-style .text-base { font-size: 1rem; }
-        .pdf-content-style .text-lg { font-size: 1.125rem; }
-        .pdf-content-style .text-xl { font-size: 1.25rem; }
-        .pdf-content-style .text-2xl { font-size: 1.5rem; }
-        .pdf-content-style .text-blue-600 { color: #2563eb; } /* Blue principale */
-        .pdf-content-style .text-gray-800 { color: #1f2937; } /* Testo scuro */
-        .pdf-content-style .text-gray-700 { color: #374151; }
-        .pdf-content-style .text-blue-700 { color: #1d4ed8; }
-        .pdf-content-style .text-blue-800 { color: #1e40af; }
-        .pdf-content-style .bg-blue-600 { background-color: #2563eb; } /* Header del PDF */
-        .pdf-content-style .bg-blue-50 { background-color: #eff6ff; }
-        .pdf-content-style .bg-gray-50 { background-color: #f9fafb; }
-        .pdf-content-style .p-6 { padding: 1.5rem; }
-        .pdf-content-style .mb-4 { margin-bottom: 1rem; }
-        .pdf-content-style .mb-6 { margin-bottom: 1.5rem; }
-        .pdf-content-style .mt-1 { margin-top: 0.25rem; }
-        .pdf-content-style .mt-3 { margin-top: 0.75rem; }
-        .pdf-content-style .pt-4 { padding-top: 1rem; }
-        .pdf-content-style .border-t { border-top-width: 1px; border-color: #e5e7eb; }
-        .pdf-content-style .flex { display: flex; }
-        .pdf-content-style .justify-between { justify-content: space-between; }
-        .pdf-content-style .items-center { align-items: center; }
-        .pdf-content-style .space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem; }
-        .pdf-content-style .rounded-lg { border-radius: 0.5rem; }
-        .pdf-content-style .flex-1 { flex: 1 1 0%; }
-        .pdf-content-style .gap-2 { gap: 0.5rem; }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
@@ -170,18 +132,17 @@
             </div>
         </div>
 
-        <!-- Quote Overlay (Modal) - Il contenuto qui dentro verrà convertito in PDF -->
+        <!-- Quote Overlay (Modal) -->
         <div id="quote-overlay" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md flex flex-col max-h-[90vh]"> <!-- Added flex-col and max-h -->
-                <div id="quote-content-to-pdf" class="pdf-content-style flex-grow overflow-y-auto"> <!-- Added flex-grow and overflow -->
-                    <div class="bg-blue-600 p-6 text-white"> <!-- Header del PDF -->
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md flex flex-col max-h-[90vh]">
+                <div class="flex-grow overflow-y-auto"> <!-- Contenuto scorrevole -->
+                    <div class="bg-blue-600 p-6 text-white">
                         <h1 class="text-2xl font-bold">📋 Preventivo</h1>
                         <p class="opacity-90">Riepilogo Servizi Grafici Specializzati</p>
                     </div>
 
                     <div class="p-6">
                         <div class="mb-4">
-                            <!-- Input per il nome cliente. Sarà sostituito da un testo per il PDF -->
                             <input type="text" id="client-name-input" placeholder="Nome Azienda/Cliente" class="w-full p-3 border border-gray-300 rounded-lg font-medium text-lg" />
                         </div>
                         
@@ -210,7 +171,6 @@
 
                         <div class="bg-blue-50 p-4 rounded-lg mb-4">
                             <h3 class="font-semibold text-blue-800 mb-2">📋 Note:</h3>
-                            <!-- Textarea per le note modificabili. Sarà sostituita da un testo per il PDF -->
                             <textarea id="quote-notes-textarea" class="w-full h-32 p-2 border border-blue-200 rounded-lg text-sm text-blue-700 bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300"></textarea>
                         </div>
 
@@ -221,15 +181,15 @@
                     </div>
                 </div>
                 
-                <!-- Bottoni di controllo dell'overlay (NON inclusi nel PDF) -->
+                <!-- Bottoni di controllo dell'overlay (NON scorrono con il contenuto) -->
                 <div class="p-6 pt-0 flex justify-center space-x-3 bg-white border-t border-gray-200 shrink-0">
                     <button id="back-to-calculator-btn" class="py-3 px-6 bg-gray-200 text-gray-800 rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-gray-300 shadow-lg transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-edit-3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/><path d="m6 6 12 12"/><path d="m15 5-3 3"/></svg>
                         Modifica
                     </button>
-                    <button id="download-pdf-btn" class="py-3 px-6 bg-green-600 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-green-700 shadow-lg transition-colors">
+                    <button id="download-txt-btn" class="py-3 px-6 bg-green-600 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-green-700 shadow-lg transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-                        Scarica PDF
+                        Scarica TXT
                     </button>
                 </div>
             </div>
@@ -249,7 +209,7 @@
         let customService = { name: '', prices: { ragionevole: '' } }; // Semplificato
 
         const periods = {
-            ragionevole: { name: 'RAGIONEVOLE', desc: '(primi 6 mesi)', color: 'text-green-600' }
+            ragionevole: { name: 'RAGIONEVOLE', desc: '(primi 6 mesi)', color: 'text-green-600' } // Questo colore è solo per il listino interno
         };
 
         const defaultNotes = `• Prezzi al netto di IVA 4% e bollo €2.
@@ -352,7 +312,7 @@
                     { id: 'gestione_produzione', name: 'Gestione stamperia/produzione', prices: { ragionevole: 150 } },
                     { id: 'file_multipli', name: 'File tecnici multipli (PDF, AI, EPS)', prices: { ragionevole: 100 } },
                     { id: 'revisioni_extra', name: 'Revisioni extra (oltre le 2-3 incluse)', prices: { ragionevole: 80 } },
-                    { id: 'consulenza_oraria', name: 'Consulenza oraria', prices: { ragionevole: 80 } }
+                    { id: 'consulenza_oraria', prices: { ragionevole: 80 } } // Modificato per rispecchiare la struttura ridotta dei prezzi
                 ]
             }
         };
@@ -378,7 +338,6 @@
 
         const renderPeriods = () => {
             const periodSelector = document.getElementById('period-selector');
-            // Ora renderizziamo solo il pulsante "Ragionevole"
             periodSelector.innerHTML = `
                 <button
                     data-period="ragionevole"
@@ -388,7 +347,6 @@
                     <div class="text-sm text-gray-600">${periods.ragionevole.desc}</div>
                 </button>
             `;
-            // Non c'è bisogno di un listener per cambiare periodo, è sempre ragionevole
             selectedPeriod = 'ragionevole'; // Assicurati che sia sempre impostato
         };
 
@@ -442,7 +400,6 @@
                 input.addEventListener('change', (e) => {
                     const categoryId = e.target.dataset.category;
                     const itemId = e.target.dataset.itemId;
-                    // Il periodo è sempre 'ragionevole'
                     const newPrice = parseFloat(e.target.value) || 0;
                     updateServicePrice(categoryId, itemId, 'ragionevole', newPrice);
                 });
@@ -454,7 +411,7 @@
             form.classList.toggle('hidden', !showCustomService);
             
             let priceInput = form.querySelector('#custom-service-price-ragionevole');
-            if (!priceInput) { // Per sicurezza, se non c'è lo crea
+            if (!priceInput) {
                 const priceInputsDiv = form.querySelector('.grid-cols-1');
                 priceInput = document.createElement('input');
                 priceInput.type = 'number';
@@ -729,84 +686,56 @@
             renderQuote();
         };
 
-        const downloadPDF = () => {
-            // Controlla se la libreria html2pdf è disponibile
-            if (typeof html2pdf === 'undefined') {
-                console.error("html2pdf.js non è caricato. Controlla la CDN o la connessione internet.");
-                alert("Errore durante la generazione del PDF. Questo succede spesso quando si apre il file direttamente dal browser (`file://`). Per un corretto funzionamento, per favore, apri il file tramite un server web locale (es. con VS Code Live Server o `python -m http.server`) o carica la pagina su un server online.");
-                return;
-            }
+        const downloadTxtFile = () => {
+            const date = new Date().toLocaleDateString('it-IT');
+            const client = clientName ? `Cliente: ${clientName}` : 'Cliente: Non specificato';
+            const periodInfo = `Periodo: ${periods[selectedPeriod].name} ${periods[selectedPeriod].desc}`; 
 
-            const quoteElement = document.getElementById('quote-content-to-pdf'); // L'elemento da convertire
+            const servicesText = selectedServices.map(service =>
+                `• ${service.name}\n  (Quantità: ${service.quantity}, Prezzo Unitario: ${formatPrice(service.price)}) ......... ${formatPrice(service.price * service.quantity)}`
+            ).join('\n\n');
 
-            // Clona l'elemento per modificarlo senza alterare la visualizzazione a schermo
-            const clonedElement = quoteElement.cloneNode(true);
-            
-            // Per il PDF, sostituisci l'input del nome cliente con un semplice testo
-            const clientNameInputPdf = clonedElement.querySelector('#client-name-input');
-            if (clientNameInputPdf) {
-                const clientNameDiv = document.createElement('div');
-                clientNameDiv.className = clientNameInputPdf.className.replace('w-full p-3 border border-gray-300 rounded-lg font-medium text-lg', 'font-bold text-2xl text-gray-800 text-center mb-4');
-                clientNameDiv.textContent = clientName || 'Nome Cliente'; // O un placeholder più specifico per il PDF
-                clientNameInputPdf.parentNode.replaceChild(clientNameDiv, clientNameInputPdf);
-            }
+            const ivaAmount = totalServicesCost * 0.04;
+            const stampDuty = totalServicesCost > 77.47 ? 2.00 : 0.00;
 
-            // Rimuovi gli input di prezzo per la versione PDF (mostra solo il testo)
-            clonedElement.querySelectorAll('.quote-service-price-input').forEach(input => {
-                const span = document.createElement('span');
-                span.textContent = formatPrice(parseFloat(input.value));
-                // Applica stili per farli apparire simili al formato del preventivo
-                span.className = 'font-bold text-blue-600'; // Stili ripresi da .pdf-content-style
-                input.parentNode.replaceChild(span, input);
-            });
+            const quoteContent = `
+PREVENTIVO SERVIZI GRAFICI E UX/UI
 
-            // Sostituisci la textarea delle note con un semplice div per il PDF
-            const textarea = clonedElement.querySelector('#quote-notes-textarea');
-            if (textarea) {
-                const notesDiv = document.createElement('div');
-                notesDiv.className = textarea.className; // Mantiene le classi CSS
-                notesDiv.style.whiteSpace = 'pre-wrap'; // Mantiene i ritorni a capo
-                notesDiv.textContent = textarea.value;
-                textarea.parentNode.replaceChild(notesDiv, textarea);
-            }
+${client}
+Data: ${date}
+${periodInfo}
 
-            const opt = {
-                margin: 10,
-                filename: `preventivo_${(clientName || 'cliente').replace(/\s+/g, '_').toLowerCase()}_${new Date().toISOString().split('T')[0]}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2, // Aumenta la scala per migliore qualità
-                    logging: true, // Abilita i log di html2canvas nella console (utile per debug)
-                    useCORS: true // Essenziale se si caricano risorse da altri domini (es. CDN)
-                }, 
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-            };
+----------------------------------------
+SERVIZI RICHIESTI:
+----------------------------------------
+${servicesText}
 
-            // Aggiungiamo un feedback visivo mentre il PDF viene generato
-            const downloadBtn = document.getElementById('download-pdf-btn');
-            const originalBtnHtml = downloadBtn.innerHTML; // Salva l'HTML originale del bottone
-            downloadBtn.innerHTML = '<svg class="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generazione PDF...';
-            downloadBtn.disabled = true;
+----------------------------------------
+Totale Servizi: ${formatPrice(totalServicesCost)}
+IVA (4%): ${formatPrice(ivaAmount)}
+Bollo: ${formatPrice(stampDuty)}
+TOTALE FINALE: ${formatPrice(totalFinal)}
+----------------------------------------
 
+NOTE:
+${currentNotes}
 
-            try {
-                html2pdf().set(opt).from(clonedElement).save().then(() => {
-                    console.log("PDF salvato con successo!");
-                    // alert("Preventivo scaricato come PDF!"); // Evita alert dopo il successo, il file si scarica
-                }).catch(error => {
-                    console.error("Errore durante la generazione o il salvataggio del PDF:", error);
-                    alert("Si è verificato un errore durante la generazione del PDF. Controlla la console del browser per i dettagli (F12) o prova ad aprire il file tramite un server locale.");
-                }).finally(() => {
-                    downloadBtn.innerHTML = originalBtnHtml; // Ripristina l'HTML originale del bottone
-                    downloadBtn.disabled = false;
-                });
-            } catch (e) {
-                console.error("Errore imprevisto durante l'inizializzazione di html2pdf:", e);
-                alert("Si è verificato un errore inatteso durante la preparazione del PDF.");
-                downloadBtn.innerHTML = originalBtnHtml; // Ripristina l'HTML originale del bottone
-                downloadBtn.disabled = false;
-            }
+Graphic & UX/UI Designer
+${new Date().getFullYear()}
+            `.trim(); // Trim per rimuovere nuove linee iniziali/finali non volute
+
+            const blob = new Blob([quoteContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `preventivo_${(clientName || 'cliente').replace(/\s+/g, '_').toLowerCase()}_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            alert("Preventivo scaricato come file di testo (.txt). Puoi aprirlo e copiare il contenuto nelle note o su WhatsApp.");
+            console.log("TXT file generated and download attempted.");
         };
 
 
@@ -891,7 +820,7 @@
                 activeTab = 'calculator';
                 renderApp();
             });
-            document.getElementById('download-pdf-btn').addEventListener('click', downloadPDF);
+            document.getElementById('download-txt-btn').addEventListener('click', downloadTxtFile); // Aggiornato a TXT
 
             // Client Name input in Quote Overlay
             document.getElementById('client-name-input').addEventListener('input', (e) => {
