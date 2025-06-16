@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preventivo Grafico</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- html2pdf.js CDN per la generazione PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsIDXPi/mEkNrCz/LZK6jD/U6P5S2y+D9I4y0x9G4eE4W2jPz1WkS1g/X8p3jF/F4O3b3f2k/F9l3/G3q3g+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="/manifest.json">
+    <!-- Theme Color for Browser UI (address bar, etc.) -->
+    <meta name="theme-color" content="#2563eb">
+
+    <style>
+        /* Stili base e reset per allinearsi al nuovo design */
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            background-color: #f8f8f8; /* Un bianco leggermente sporco per lo sfondo generale */
+            color: #1a1a1a; /* Colore testo scuro */
+        }
+        .scrollable-content {
+            max-height: 10rem; /* Regola altezza massima per lo scroll */
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        /* Nasconde le frecce per gli input di tipo number */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield; /* Firefox */
+        }
+
+        /* Stili specifici per il contenuto che andrà nel PDF per un aspetto migliore */
+        /* Applicati all'elemento #quote-content-to-pdf */
+        .pdf-content-style {
+            background-color: #ffffff; /* Sfondo bianco per il contenuto del PDF */
+            border-radius: 1rem; /* Bordo arrotondato */
+            overflow: hidden;
+        }
+        .pdf-content-style .font-bold { font-weight: 700; }
+        .pdf-content-style .text-sm { font-size: 0.875rem; }
+        .pdf-content-style .text-base { font-size: 1rem; }
+        .pdf-content-style .text-lg { font-size: 1.125rem; }
+        .pdf-content-style .text-xl { font-size: 1.25rem; }
+        .pdf-content-style .text-2xl { font-size: 1.5rem; }
+        .pdf-content-style .text-blue-600 { color: #2563eb; } /* Blue principale */
+        .pdf-content-style .text-gray-800 { color: #1f2937; } /* Testo scuro */
+        .pdf-content-style .text-gray-700 { color: #374151; }
+        .pdf-content-style .text-blue-700 { color: #1d4ed8; }
+        .pdf-content-style .text-blue-800 { color: #1e40af; }
+        .pdf-content-style .bg-blue-600 { background-color: #2563eb; } /* Header del PDF */
+        .pdf-content-style .bg-blue-50 { background-color: #eff6ff; }
+        .pdf-content-style .bg-gray-50 { background-color: #f9fafb; }
+        .pdf-content-style .p-6 { padding: 1.5rem; }
+        .pdf-content-style .mb-4 { margin-bottom: 1rem; }
+        .pdf-content-style .mb-6 { margin-bottom: 1.5rem; }
+        .pdf-content-style .mt-1 { margin-top: 0.25rem; }
+        .pdf-content-style .mt-3 { margin-top: 0.75rem; }
+        .pdf-content-style .pt-4 { padding-top: 1rem; }
+        .pdf-content-style .border-t { border-top-width: 1px; border-color: #e5e7eb; }
+        .pdf-content-style .flex { display: flex; }
+        .pdf-content-style .justify-between { justify-content: space-between; }
+        .pdf-content-style .items-center { align-items: center; }
+        .pdf-content-style .space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem; }
+        .pdf-content-style .rounded-lg { border-radius: 0.5rem; }
+        .pdf-content-style .flex-1 { flex: 1 1 0%; }
+        .pdf-content-style .gap-2 { gap: 0.5rem; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+
+    <div id="app-container" class="relative">
+        <!-- Header (New UI Style) -->
+        <div class="bg-blue-600 text-white p-4 sticky top-0 z-20 shadow-md">
+            <h1 class="text-xl font-bold">🎨 Calcolatore Preventivi</h1>
+            <p class="text-sm opacity-90">Graphic & UX/UI Designer</p>
+        </div>
+
+        <!-- Tab Navigation (New UI Style) -->
+        <div class="flex bg-white border-b sticky top-[72px] z-20 shadow-sm">
+            <button id="calculator-tab" class="flex-1 py-3 px-4 text-center font-medium transition-colors text-blue-600 border-b-2 border-blue-600 bg-blue-50">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mx-auto mb-1"><rect width="16" height="16" x="4" y="4" rx="2" /><path d="M8 2V6" /><path d="M16 2V6" /><path d="M4 10H20" /><path d="M8 14H16" /><path d="M11 18H13" /></svg>
+                Calcolatore
+            </button>
+            <button id="listino-tab" class="flex-1 py-3 px-4 text-center font-medium transition-colors text-gray-600 hover:bg-gray-100">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mx-auto mb-1"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></svg>
+                Listino
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div id="calculator-view" class="p-4 pb-48">
+            <!-- Period Selector (Semplificato) -->
+            <div class="mb-6 bg-white p-4 rounded-xl shadow-sm">
+                <h3 class="text-lg font-semibold mb-3 text-gray-800">📅 Periodo di Collaborazione:</h3>
+                <div id="period-selector" class="grid grid-cols-1 gap-3">
+                    <!-- Questo verrà popolato con un solo pulsante dal JS -->
+                </div>
+            </div>
+
+            <!-- Add Custom Service Button (New UI Style) -->
+            <div class="mb-6">
+                <button id="toggle-custom-service" class="w-full p-3 bg-blue-50 border-2 border-blue-200 border-dashed rounded-xl text-blue-700 font-medium flex items-center justify-center gap-2 hover:bg-blue-100 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M12 5V19"/><path d="M5 12H19"/></svg>
+                    Aggiungi Servizio Personalizzato
+                </button>
+
+                <div id="custom-service-form" class="mt-4 p-4 bg-white rounded-xl border-2 border-blue-200 shadow-md hidden">
+                    <input type="text" id="custom-service-name" placeholder="Nome del servizio" class="w-full p-2 border border-gray-300 rounded-lg mb-3 focus:ring-blue-500 focus:border-blue-500" />
+                    <div class="grid grid-cols-1 gap-2 mb-3">
+                        <input type="number" id="custom-service-price-ragionevole" placeholder="Prezzo" class="p-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="save-custom-service" class="flex-1 py-2 bg-blue-600 text-white rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                            Salva
+                        </button>
+                        <button id="cancel-custom-service" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services List (New UI Style) -->
+            <div id="services-list" class="space-y-6">
+                <!-- Service categories and items will be injected here by JS -->
+            </div>
+        </div>
+
+        <div id="listino-view" class="p-4 hidden">
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="bg-gray-800 text-white p-4"> <!-- Darker header for listino -->
+                    <h2 class="text-xl font-bold">📋 Listino Prezzi 2025</h2>
+                    <p class="text-sm opacity-90">Regime Forfettario 4% + Bollo €2</p>
+                </div>
+                <div id="listino-content" class="p-4 space-y-6">
+                    <!-- Listino categories and items will be injected here by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Fixed Bottom Cart (New UI Style) -->
+        <div id="fixed-cart" class="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-blue-200 shadow-2xl z-10 hidden">
+            <div class="max-w-screen-md mx-auto p-4">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-gray-700">Il tuo preventivo:</span>
+                    <span id="cart-item-count" class="font-bold text-blue-600 bg-blue-100 px-2 py-1 rounded-full text-sm">0 servizi</span>
+                </div>
+                
+                <div id="cart-items" class="scrollable-content space-y-2 mb-3 pr-2">
+                    <!-- Cart items will be injected here by JS -->
+                </div>
+
+                <div class="border-t pt-3 flex justify-between items-center mb-3">
+                    <span class="text-lg font-bold">TOTALE (IVA e Bollo inclusi):</span>
+                    <span id="cart-total" class="text-2xl font-bold text-blue-600">€0,00</span>
+                </div>
+
+                <button id="generate-quote-btn" class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 text-lg shadow-lg hover:bg-blue-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    Vai al Preventivo
+                </button>
+            </div>
+        </div>
+
+        <!-- Quote Overlay (Modal) - Il contenuto qui dentro verrà convertito in PDF -->
+        <div id="quote-overlay" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md flex flex-col max-h-[90vh]"> <!-- Added flex-col and max-h -->
+                <div id="quote-content-to-pdf" class="pdf-content-style flex-grow overflow-y-auto"> <!-- Added flex-grow and overflow -->
+                    <div class="bg-blue-600 p-6 text-white"> <!-- Header del PDF -->
+                        <h1 class="text-2xl font-bold">📋 Preventivo</h1>
+                        <p class="opacity-90">Riepilogo Servizi Grafici Specializzati</p>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="mb-4">
+                            <!-- Input per il nome cliente. Sarà sostituito da un testo per il PDF -->
+                            <input type="text" id="client-name-input" placeholder="Nome Azienda/Cliente" class="w-full p-3 border border-gray-300 rounded-lg font-medium text-lg" />
+                        </div>
+                        
+                        <div id="quote-services-list" class="space-y-3 mb-6 scrollable-content">
+                            <!-- Selected services will be injected here -->
+                        </div>
+
+                        <div class="border-t pt-4 mb-6">
+                            <div class="flex justify-between items-center text-gray-700">
+                                <span class="text-lg font-medium">Totale Servizi:</span>
+                                <span id="subtotal" class="text-xl font-semibold">€0,00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-gray-700 mt-1">
+                                <span class="text-lg font-medium">IVA (4%):</span>
+                                <span id="vat-amount" class="text-xl font-semibold">€0,00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-gray-700 mt-1">
+                                <span class="text-lg font-medium">Bollo:</span>
+                                <span id="stamp-duty" class="text-xl font-semibold">€0,00</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-3">
+                                <span class="text-xl font-bold">TOTALE FINALE:</span>
+                                <span id="quote-total" class="text-2xl font-bold text-blue-600">€0,00</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                            <h3 class="font-semibold text-blue-800 mb-2">📋 Note:</h3>
+                            <!-- Textarea per le note modificabili. Sarà sostituita da un testo per il PDF -->
+                            <textarea id="quote-notes-textarea" class="w-full h-32 p-2 border border-blue-200 rounded-lg text-sm text-blue-700 bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300"></textarea>
+                        </div>
+
+                        <div class="text-center mt-6 text-gray-600 text-sm">
+                            <p>Graphic & UX/UI Designer</p>
+                            <p id="current-year-footer"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bottoni di controllo dell'overlay (NON inclusi nel PDF) -->
+                <div class="p-6 pt-0 flex justify-center space-x-3 bg-white border-t border-gray-200 shrink-0">
+                    <button id="back-to-calculator-btn" class="py-3 px-6 bg-gray-200 text-gray-800 rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-gray-300 shadow-lg transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-edit-3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/><path d="m6 6 12 12"/><path d="m15 5-3 3"/></svg>
+                        Modifica
+                    </button>
+                    <button id="download-pdf-btn" class="py-3 px-6 bg-green-600 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-green-700 shadow-lg transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        Scarica PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Stato dell'applicazione ---
+        let activeTab = 'calculator';
+        let selectedPeriod = 'ragionevole'; // Sempre 'ragionevole' ora
+        let selectedServices = []; // { id, name, price, quantity, category }
+        let totalServicesCost = 0; // Totale dei soli servizi, prima di IVA e bollo
+        let totalFinal = 0; // Totale finale con IVA e bollo
+        let showQuote = false;
+        let clientName = '';
+        let showCustomService = false;
+        let customService = { name: '', prices: { ragionevole: '' } }; // Semplificato
+
+        const periods = {
+            ragionevole: { name: 'RAGIONEVOLE', desc: '(primi 6 mesi)', color: 'text-green-600' }
+        };
+
+        const defaultNotes = `• Prezzi al netto di IVA 4% e bollo €2.
+• Acconto 50% richiesto prima dell'inizio dei lavori.
+• Saldo alla consegna del materiale o a fine lavori.
+• Per ogni progetto sono incluse 2-3 tornate di revisioni. Revisioni extra verranno conteggiate a parte.
+• La cessione completa dei diritti d'autore avverrà solo a saldo avvenuto.`;
+        let currentNotes = defaultNotes; // Note modificabili dall'utente
+
+        // Struttura dei servizi semplificata per un solo periodo (ragionevole)
+        let services = {
+            grafiche: {
+                title: '🎨 GRAFICHE ORIGINALI',
+                items: [
+                    { id: 'grafica_complessa', name: 'Grafica principale complessa (10+ giorni)', prices: { ragionevole: 800 } },
+                    { id: 'grafica_media', name: 'Grafica media complessità (5-7 giorni)', prices: { ragionevole: 500 } },
+                    { id: 'logo_semplice', name: 'Logo/Simbolo semplice', prices: { ragionevole: 300 } }
+                ]
+            },
+            flat: {
+                title: '📐 FLAT DESIGN TECNICI',
+                items: [
+                    { id: 'flat_singolo', name: 'Flat design singolo', prices: { ragionevole: 100 } },
+                    { id: 'flat_multipli', name: 'Flat design multipli (5-7 pezzi)', prices: { ragionevole: 600 } },
+                    { id: 'flat_speciali', name: 'Flat con lavorazioni speciali', prices: { ragionevole: 130 } }
+                ]
+            },
+            schede: {
+                title: '📋 SCHEDE PRODOTTO',
+                items: [
+                    { id: 'scheda_completa', name: 'Scheda prodotto completa', prices: { ragionevole: 80 } },
+                    { id: 'piazzato', name: 'Piazzato su cartamodello', prices: { ragionevole: 200 } },
+                    { id: 'schede_multiple', name: 'Schede prodotto multiple (7 pezzi)', prices: { ragionevole: 450 } }
+                ]
+            },
+            collaborazioni: {
+                title: '🔄 COLLABORAZIONI CONTINUATIVE',
+                items: [
+                    { id: 'forfait_base', name: 'Forfait mensile base', prices: { ragionevole: 1250 } },
+                    { id: 'forfait_premium', name: 'Forfait mensile premium', prices: { ragionevole: 1500 } }
+                ]
+            },
+            speciali: {
+                title: '🎭 PROGETTI SPECIALI',
+                items: [
+                    { id: 'teatro', name: 'Progetto teatro/evento prestigioso', prices: { ragionevole: 1200 } },
+                    { id: 'brand_premium', name: 'Brand fashion premium completo', prices: { ragionevole: 1300 } }
+                ]
+            },
+            branding: {
+                title: '🎯 BRANDING COMPLETO',
+                items: [
+                    { id: 'branding_startup', name: 'Branding Startup (Logo + Palette + Guidelines)', prices: { ragionevole: 1200 } },
+                    { id: 'branding_complete', name: 'Branding Completo (+ Social + Posizionamento)', prices: { ragionevole: 2000 } },
+                    { id: 'branding_premium', name: 'Branding Premium (+ User Personas + Strategy)', prices: { ragionevole: 3000 } }
+                ]
+            },
+            uxui_wireframe: {
+                title: '📐 UX/UI WIREFRAME & PROTOTIPI',
+                items: [
+                    { id: 'wireframe_homepage', name: 'Wireframe Homepage (Desktop + Mobile)', prices: { ragionevole: 300 } },
+                    { id: 'wireframe_pagine', name: 'Wireframe Pagine Interne (3-5 pagine)', prices: { ragionevole: 500 } },
+                    { id: 'wireframe_ecommerce', name: 'Wireframe E-commerce (Home + Lista + Prodotto)', prices: { ragionevole: 600 } },
+                    { id: 'prototipo_semplice', name: 'Prototipo Interattivo Semplice (5-7 schermate)', prices: { ragionevole: 800 } },
+                    { id: 'prototipo_complesso', name: 'Prototipo Complesso (10+ schermate + flow)', prices: { ragionevole: 1200 } }
+                ]
+            },
+            ux_research: {
+                title: '🔍 UX RESEARCH & STRATEGY',
+                items: [
+                    { id: 'user_personas', name: 'User Personas & Target Analysis', prices: { ragionevole: 600 } },
+                    { id: 'user_journey', name: 'User Journey Mapping', prices: { ragionevole: 500 } },
+                    { id: 'survey_research', name: 'Survey & User Research', prices: { ragionevole: 400 } },
+                    { id: 'accessibility_audit', name: 'Accessibility Audit & Guidelines', prices: { ragionevole: 700 } },
+                    { id: 'case_study', name: 'Case Study Completo (As-Is + Proposte)', prices: { ragionevole: 800 } }
+                ]
+            },
+            ui_design: {
+                title: '🎨 UI DESIGN ELEMENTI',
+                items: [
+                    { id: 'homepage_design', name: 'Homepage Design (solo UI)', prices: { ragionevole: 400 } },
+                    { id: 'header_footer', name: 'Header & Footer Design', prices: { ragionevole: 250 } },
+                    { id: 'pagina_singola', name: 'Pagina Singola (About, Contatti, etc.)', prices: { ragionevole: 200 } },
+                    { id: 'componenti_ui', name: 'Componenti UI Custom (bottoni, form, card)', prices: { ragionevole: 300 } },
+                    { id: 'style_guide', name: 'Style Guide & Design System', prices: { ragionevole: 500 } }
+                ]
+            },
+            grafiche_digital: {
+                title: '📱 GRAFICHE DIGITAL & SOCIAL',
+                items: [
+                    { id: 'palette_colori', name: 'Palette Colori + Guidelines', prices: { ragionevole: 200 } },
+                    { id: 'social_templates', name: 'Template Social Media (10 pezzi)', prices: { ragionevole: 400 } },
+                    { id: 'banner_web', name: 'Banner Web & Advertising', prices: { ragionevole: 150 } },
+                    { id: 'iconografia', name: 'Set Icone Custom (15-20 pezzi)', prices: { ragionevole: 300 } }
+                ]
+            },
+            aggiuntivi: {
+                title: '🛠 SERVIZI AGGIUNTIVI',
+                items: [
+                    { id: 'gestione_produzione', name: 'Gestione stamperia/produzione', prices: { ragionevole: 150 } },
+                    { id: 'file_multipli', name: 'File tecnici multipli (PDF, AI, EPS)', prices: { ragionevole: 100 } },
+                    { id: 'revisioni_extra', name: 'Revisioni extra (oltre le 2-3 incluse)', prices: { ragionevole: 80 } },
+                    { id: 'consulenza_oraria', name: 'Consulenza oraria', prices: { ragionevole: 80 } }
+                ]
+            }
+        };
+
+        // --- Funzioni di utilità ---
+        const formatPrice = (price) => `€${price.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+        const calculateTotals = () => {
+            totalServicesCost = selectedServices.reduce((sum, service) => {
+                return sum + (service.price * service.quantity);
+            }, 0);
+
+            const ivaAmount = totalServicesCost * 0.04; // 4% IVA
+            const stampDuty = totalServicesCost > 77.47 ? 2.00 : 0.00; // Bollo di 2€ se l'importo supera 77.47€
+
+            totalFinal = totalServicesCost + ivaAmount + stampDuty;
+
+            document.getElementById('cart-total').textContent = formatPrice(totalFinal);
+            document.getElementById('cart-item-count').textContent = `${selectedServices.length} servizi`;
+        };
+
+        // --- Funzioni di rendering ---
+
+        const renderPeriods = () => {
+            const periodSelector = document.getElementById('period-selector');
+            // Ora renderizziamo solo il pulsante "Ragionevole"
+            periodSelector.innerHTML = `
+                <button
+                    data-period="ragionevole"
+                    class="p-3 rounded-xl border-2 text-left transition-all duration-200 border-blue-500 bg-blue-50 shadow-lg w-full"
+                >
+                    <div class="font-bold text-lg text-blue-600">${periods.ragionevole.name}</div>
+                    <div class="text-sm text-gray-600">${periods.ragionevole.desc}</div>
+                </button>
+            `;
+            // Non c'è bisogno di un listener per cambiare periodo, è sempre ragionevole
+            selectedPeriod = 'ragionevole'; // Assicurati che sia sempre impostato
+        };
+
+        const renderServicesList = () => {
+            const servicesListEl = document.getElementById('services-list');
+            servicesListEl.innerHTML = Object.entries(services).map(([categoryId, category]) => `
+                <div class="bg-white rounded-xl shadow p-4">
+                    <h3 class="font-semibold text-gray-800 mb-3">${category.title}</h3>
+                    <div class="space-y-3">
+                        ${category.items.map((item) => `
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex-1 mr-3">
+                                    <p class="font-medium text-sm text-gray-700">${item.name}</p>
+                                    <div class="flex items-center gap-1 mt-1">
+                                        <span class="text-lg font-semibold text-blue-600">€</span>
+                                        <input
+                                            type="number"
+                                            value="${item.prices.ragionevole}"
+                                            data-category="${categoryId}"
+                                            data-item-id="${item.id}"
+                                            data-period="ragionevole"
+                                            class="w-24 px-2 py-1 text-base font-semibold border border-gray-300 rounded bg-white service-price-input"
+                                        />
+                                    </div>
+                                </div>
+                                <button
+                                    data-category="${categoryId}"
+                                    data-item-id="${item.id}"
+                                    class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition-colors shadow-sm add-service-btn"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M12 5V19"/><path d="M5 12H19"/></svg>
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            // Add event listeners for "Add Service" buttons
+            servicesListEl.querySelectorAll('.add-service-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const categoryId = e.currentTarget.dataset.category;
+                    const itemId = e.currentTarget.dataset.itemId;
+                    const item = services[categoryId].items.find(i => i.id === itemId);
+                    addService(categoryId, item);
+                });
+            });
+
+            // Add event listeners for price inputs
+            servicesListEl.querySelectorAll('.service-price-input').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const categoryId = e.target.dataset.category;
+                    const itemId = e.target.dataset.itemId;
+                    // Il periodo è sempre 'ragionevole'
+                    const newPrice = parseFloat(e.target.value) || 0;
+                    updateServicePrice(categoryId, itemId, 'ragionevole', newPrice);
+                });
+            });
+        };
+
+        const renderCustomServiceForm = () => {
+            const form = document.getElementById('custom-service-form');
+            form.classList.toggle('hidden', !showCustomService);
+            
+            let priceInput = form.querySelector('#custom-service-price-ragionevole');
+            if (!priceInput) { // Per sicurezza, se non c'è lo crea
+                const priceInputsDiv = form.querySelector('.grid-cols-1');
+                priceInput = document.createElement('input');
+                priceInput.type = 'number';
+                priceInput.id = 'custom-service-price-ragionevole';
+                priceInput.placeholder = 'Prezzo';
+                priceInput.className = 'p-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500';
+                priceInputsDiv.appendChild(priceInput);
+            }
+            priceInput.value = customService.prices.ragionevole || '';
+        };
+
+        const renderCart = () => {
+            const cartItemsEl = document.getElementById('cart-items');
+            const fixedCartEl = document.getElementById('fixed-cart');
+
+            if (selectedServices.length === 0 || activeTab !== 'calculator') {
+                fixedCartEl.classList.add('hidden');
+                cartItemsEl.innerHTML = '';
+            } else {
+                fixedCartEl.classList.remove('hidden');
+                cartItemsEl.innerHTML = selectedServices.map(service => `
+                    <div class="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
+                        <span class="text-sm font-medium text-gray-800 flex-1 truncate pr-2">${service.name}</span>
+                        <div class="flex items-center gap-2">
+                            <button data-id="${service.id}" data-change="-1" class="p-1 rounded-full bg-gray-200 hover:bg-gray-300 quantity-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-minus"><path d="M5 12h14"/></svg>
+                            </button>
+                            <span class="font-bold text-sm w-4 text-center">${service.quantity}</span>
+                            <button data-id="${service.id}" data-change="1" class="p-1 rounded-full bg-gray-200 hover:bg-gray-300 quantity-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M12 5V19"/><path d="M5 12H19"/></svg>
+                            </button>
+                            <span class="text-sm font-semibold w-20 text-right">${formatPrice(service.price * service.quantity)}</span>
+                            <button data-id="${service.id}" class="text-gray-400 hover:text-red-500 ml-1 remove-service-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Add event listeners for quantity buttons
+                cartItemsEl.querySelectorAll('.quantity-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = e.currentTarget.dataset.id;
+                        const change = parseInt(e.currentTarget.dataset.change);
+                        updateQuantity(id, change);
+                    });
+                });
+
+                // Add event listeners for remove buttons
+                cartItemsEl.querySelectorAll('.remove-service-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = e.currentTarget.dataset.id;
+                        removeService(id);
+                    });
+                });
+            }
+            calculateTotals();
+        };
+
+        const renderListino = () => {
+            const listinoContentEl = document.getElementById('listino-content');
+            listinoContentEl.innerHTML = Object.entries(services).map(([categoryId, category]) => `
+                <div>
+                    <h3 class="font-semibold text-gray-800 mb-3">${category.title}</h3>
+                    <div class="space-y-2">
+                        ${category.items.map((item) => `
+                            <div class="bg-gray-50 rounded-lg p-3">
+                                <p class="font-medium text-sm mb-2">${item.name}</p>
+                                <div class="grid grid-cols-1 gap-2 text-xs">
+                                    <div class="text-center p-2 bg-blue-50 rounded-md">
+                                        <div class="text-blue-600 font-bold text-base">${formatPrice(item.prices.ragionevole)}</div>
+                                        <div class="text-gray-500">Prezzo Standard</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            listinoContentEl.innerHTML += `
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-blue-800 mb-2">📝 Note Importanti</h3>
+                    <div class="text-sm text-blue-700 space-y-1">
+                        <p>• Prezzi al netto di IVA 4% e bollo €2</p>
+                        <p>• Acconto 50% prima dell'inizio</p>
+                        <p>• 2-3 revisioni incluse per progetto</p>
+                        <p>• Tempistiche: Flat 2-3gg, Grafiche 7-15gg</p>
+                        <p>• Cessione diritti completa solo a saldo</p>
+                    </div>
+                </div>
+            `;
+        };
+
+        const renderQuote = () => {
+            const quoteOverlay = document.getElementById('quote-overlay');
+            const quoteServicesList = document.getElementById('quote-services-list');
+            const subtotalEl = document.getElementById('subtotal');
+            const vatAmountEl = document.getElementById('vat-amount');
+            const stampDutyEl = document.getElementById('stamp-duty');
+            const quoteTotalEl = document.getElementById('quote-total');
+            const clientNameInput = document.getElementById('client-name-input');
+            const quoteNotesTextarea = document.getElementById('quote-notes-textarea');
+            const currentYearFooter = document.getElementById('current-year-footer');
+
+            if (showQuote) {
+                quoteOverlay.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden'); // Blocca lo scroll del body
+
+                clientNameInput.value = clientName;
+                quoteNotesTextarea.value = currentNotes;
+                currentYearFooter.textContent = new Date().getFullYear();
+
+                quoteServicesList.innerHTML = selectedServices.map(service => `
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <div class="flex-1">
+                            <p class="font-medium text-sm">${service.name}</p>
+                            <div class="flex items-center gap-2 text-xs text-gray-600">
+                                <span class="font-mono">€</span>
+                                <input
+                                    type="number"
+                                    value="${service.price}"
+                                    data-id="${service.id}"
+                                    class="w-20 px-1 py-1 border border-gray-300 rounded text-center quote-service-price-input"
+                                />
+                                <span class="font-mono">× ${service.quantity}</span>
+                            </div>
+                        </div>
+                        <p class="font-bold text-blue-600">
+                            ${formatPrice(service.price * service.quantity)}
+                        </p>
+                    </div>
+                `).join('');
+
+                // Add event listeners for price inputs in quote
+                quoteServicesList.querySelectorAll('.quote-service-price-input').forEach(input => {
+                    input.addEventListener('change', (e) => {
+                        const id = e.target.dataset.id;
+                        const newPrice = parseFloat(e.target.value) || 0;
+                        updateServicePriceInCart(id, newPrice);
+                        calculateTotals(); // Ricalcola i totali
+                        renderQuote(); // Re-render quote to update total and individual service totals
+                    });
+                });
+
+                // Aggiorna i totali nella preview del preventivo
+                subtotalEl.textContent = formatPrice(totalServicesCost);
+                const ivaAmount = totalServicesCost * 0.04;
+                const stampDuty = totalServicesCost > 77.47 ? 2.00 : 0.00;
+                vatAmountEl.textContent = formatPrice(ivaAmount);
+                stampDutyEl.textContent = formatPrice(stampDuty);
+                quoteTotalEl.textContent = formatPrice(totalFinal);
+
+            } else {
+                quoteOverlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        };
+
+
+        // --- Gestione Stato (equivalenti delle setState React) ---
+
+        const updateServicePrice = (categoryId, itemId, period, newPrice) => {
+            // Aggiorna la variabile globale 'services'
+            services = {
+                ...services,
+                [categoryId]: {
+                    ...services[categoryId],
+                    items: services[categoryId].items.map(item =>
+                        item.id === itemId
+                            ? { ...item, prices: { ragionevole: newPrice } } // Solo il prezzo ragionevole
+                            : item
+                    )
+                }
+            };
+
+            // Aggiorna anche i servizi selezionati se presenti nel carrello
+            selectedServices = selectedServices.map(service =>
+                service.id === itemId
+                    ? { ...service, price: newPrice }
+                    : service
+            );
+            calculateTotals();
+            renderCart(); // Forza l'aggiornamento del carrello
+        };
+
+        const addCustomService = () => {
+            const nameInput = document.getElementById('custom-service-name');
+            const priceRagionevoleInput = document.getElementById('custom-service-price-ragionevole');
+            
+            const name = nameInput.value.trim();
+            const priceRagionevole = parseFloat(priceRagionevoleInput.value) || 0;
+            
+            if (!name || priceRagionevole === 0) {
+                alert('Il nome del servizio e il prezzo sono obbligatori.');
+                return;
+            }
+
+            const newId = 'custom_' + Date.now();
+            const newService = {
+                id: newId,
+                name: name,
+                prices: {
+                    ragionevole: priceRagionevole
+                }
+            };
+
+            // Aggiungi alla categoria "Servizi Aggiuntivi"
+            if (!services.aggiuntivi) {
+                services.aggiuntivi = { title: '🛠 SERVIZI AGGIUNTIVI', items: [] };
+            }
+            services.aggiuntivi.items.push(newService);
+
+            // Reset form
+            nameInput.value = '';
+            priceRagionevoleInput.value = '';
+            customService = { name: '', prices: { ragionevole: '' } }; // Reset anche lo stato locale
+            showCustomService = false;
+            renderCustomServiceForm();
+            renderServicesList(); // Re-render per mostrare il nuovo servizio
+        };
+
+        const addService = (categoryId, item) => {
+            const price = item.prices.ragionevole; // Sempre ragionevole
+            const existingService = selectedServices.find(s => s.id === item.id);
+
+            if (existingService) {
+                selectedServices = selectedServices.map(s =>
+                    s.id === item.id ? { ...s, quantity: s.quantity + 1 } : s
+                );
+            } else {
+                selectedServices = [...selectedServices, {
+                    id: item.id,
+                    name: item.name,
+                    price: price,
+                    quantity: 1,
+                    category: categoryId
+                }];
+            }
+            calculateTotals();
+            renderCart();
+        };
+
+        const updateQuantity = (id, change) => {
+            selectedServices = selectedServices.map(service => {
+                if (service.id === id) {
+                    const newQuantity = Math.max(0, service.quantity + change);
+                    return newQuantity === 0 ? null : { ...service, quantity: newQuantity };
+                }
+                return service;
+            }).filter(Boolean); // Rimuove gli elementi null (quantità 0)
+            calculateTotals();
+            renderCart();
+        };
+
+        const updateServicePriceInCart = (id, newPrice) => {
+            selectedServices = selectedServices.map(service =>
+                service.id === id ? { ...service, price: newPrice } : service
+            );
+            calculateTotals();
+            renderCart(); // Aggiorna il carrello per riflettere il nuovo prezzo
+        };
+
+        const removeService = (id) => {
+            selectedServices = selectedServices.filter(service => service.id !== id);
+            calculateTotals();
+            renderCart();
+        };
+
+        const generateQuote = () => {
+            showQuote = true;
+            renderQuote();
+        };
+
+        const downloadPDF = () => {
+            // Controlla se la libreria html2pdf è disponibile
+            if (typeof html2pdf === 'undefined') {
+                console.error("html2pdf.js non è caricato. Controlla la CDN o la connessione internet.");
+                alert("Errore durante la generazione del PDF. Questo succede spesso quando si apre il file direttamente dal browser (`file://`). Per un corretto funzionamento, per favore, apri il file tramite un server web locale (es. con VS Code Live Server o `python -m http.server`) o carica la pagina su un server online.");
+                return;
+            }
+
+            const quoteElement = document.getElementById('quote-content-to-pdf'); // L'elemento da convertire
+
+            // Clona l'elemento per modificarlo senza alterare la visualizzazione a schermo
+            const clonedElement = quoteElement.cloneNode(true);
+            
+            // Per il PDF, sostituisci l'input del nome cliente con un semplice testo
+            const clientNameInputPdf = clonedElement.querySelector('#client-name-input');
+            if (clientNameInputPdf) {
+                const clientNameDiv = document.createElement('div');
+                clientNameDiv.className = clientNameInputPdf.className.replace('w-full p-3 border border-gray-300 rounded-lg font-medium text-lg', 'font-bold text-2xl text-gray-800 text-center mb-4');
+                clientNameDiv.textContent = clientName || 'Nome Cliente'; // O un placeholder più specifico per il PDF
+                clientNameInputPdf.parentNode.replaceChild(clientNameDiv, clientNameInputPdf);
+            }
+
+            // Rimuovi gli input di prezzo per la versione PDF (mostra solo il testo)
+            clonedElement.querySelectorAll('.quote-service-price-input').forEach(input => {
+                const span = document.createElement('span');
+                span.textContent = formatPrice(parseFloat(input.value));
+                // Applica stili per farli apparire simili al formato del preventivo
+                span.className = 'font-bold text-blue-600'; // Stili ripresi da .pdf-content-style
+                input.parentNode.replaceChild(span, input);
+            });
+
+            // Sostituisci la textarea delle note con un semplice div per il PDF
+            const textarea = clonedElement.querySelector('#quote-notes-textarea');
+            if (textarea) {
+                const notesDiv = document.createElement('div');
+                notesDiv.className = textarea.className; // Mantiene le classi CSS
+                notesDiv.style.whiteSpace = 'pre-wrap'; // Mantiene i ritorni a capo
+                notesDiv.textContent = textarea.value;
+                textarea.parentNode.replaceChild(notesDiv, textarea);
+            }
+
+            const opt = {
+                margin: 10,
+                filename: `preventivo_${(clientName || 'cliente').replace(/\s+/g, '_').toLowerCase()}_${new Date().toISOString().split('T')[0]}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2, // Aumenta la scala per migliore qualità
+                    logging: true, // Abilita i log di html2canvas nella console (utile per debug)
+                    useCORS: true // Essenziale se si caricano risorse da altri domini (es. CDN)
+                }, 
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            // Aggiungiamo un feedback visivo mentre il PDF viene generato
+            const downloadBtn = document.getElementById('download-pdf-btn');
+            const originalBtnHtml = downloadBtn.innerHTML; // Salva l'HTML originale del bottone
+            downloadBtn.innerHTML = '<svg class="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generazione PDF...';
+            downloadBtn.disabled = true;
+
+
+            try {
+                html2pdf().set(opt).from(clonedElement).save().then(() => {
+                    console.log("PDF salvato con successo!");
+                    // alert("Preventivo scaricato come PDF!"); // Evita alert dopo il successo, il file si scarica
+                }).catch(error => {
+                    console.error("Errore durante la generazione o il salvataggio del PDF:", error);
+                    alert("Si è verificato un errore durante la generazione del PDF. Controlla la console del browser per i dettagli (F12) o prova ad aprire il file tramite un server locale.");
+                }).finally(() => {
+                    downloadBtn.innerHTML = originalBtnHtml; // Ripristina l'HTML originale del bottone
+                    downloadBtn.disabled = false;
+                });
+            } catch (e) {
+                console.error("Errore imprevisto durante l'inizializzazione di html2pdf:", e);
+                alert("Si è verificato un errore inatteso durante la preparazione del PDF.");
+                downloadBtn.innerHTML = originalBtnHtml; // Ripristina l'HTML originale del bottone
+                downloadBtn.disabled = false;
+            }
+        };
+
+
+        // --- Funzione di rendering principale ---
+        const renderApp = () => {
+            document.getElementById('calculator-view').classList.toggle('hidden', activeTab !== 'calculator');
+            document.getElementById('listino-view').classList.toggle('hidden', activeTab !== 'listino');
+
+            document.getElementById('calculator-tab').classList.toggle('text-blue-600', activeTab === 'calculator');
+            document.getElementById('calculator-tab').classList.toggle('border-b-2', activeTab === 'calculator');
+            document.getElementById('calculator-tab').classList.toggle('border-blue-600', activeTab === 'calculator');
+            document.getElementById('calculator-tab').classList.toggle('bg-blue-50', activeTab === 'calculator');
+            document.getElementById('calculator-tab').classList.toggle('text-gray-600', activeTab !== 'calculator');
+            document.getElementById('calculator-tab').classList.toggle('hover:bg-gray-100', activeTab !== 'calculator');
+
+            document.getElementById('listino-tab').classList.toggle('text-blue-600', activeTab === 'listino');
+            document.getElementById('listino-tab').classList.toggle('border-b-2', activeTab === 'listino');
+            document.getElementById('listino-tab').classList.toggle('border-blue-600', activeTab === 'listino');
+            document.getElementById('listino-tab').classList.toggle('bg-blue-50', activeTab === 'listino');
+            document.getElementById('listino-tab').classList.toggle('text-gray-600', activeTab !== 'listino');
+            document.getElementById('listino-tab').classList.toggle('hover:bg-gray-100', activeTab !== 'listino');
+
+            if (activeTab === 'calculator') {
+                renderPeriods();
+                renderServicesList();
+                renderCustomServiceForm();
+                renderCart();
+            } else {
+                renderListino();
+                document.getElementById('fixed-cart').classList.add('hidden'); // Hide cart when on listino tab
+            }
+
+            // Always render quote as an overlay, its visibility is handled by showQuote
+            renderQuote();
+        };
+
+        // --- PWA Service Worker Registration ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+
+
+        // --- Event Listeners Globali ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tab Buttons
+            document.getElementById('calculator-tab').addEventListener('click', () => {
+                activeTab = 'calculator';
+                showQuote = false; // Close quote if open
+                renderApp();
+            });
+            document.getElementById('listino-tab').addEventListener('click', () => {
+                activeTab = 'listino';
+                showQuote = false; // Close quote if open
+                renderApp();
+            });
+
+            // Toggle Custom Service Form
+            document.getElementById('toggle-custom-service').addEventListener('click', () => {
+                showCustomService = !showCustomService;
+                renderCustomServiceForm();
+            });
+            document.getElementById('save-custom-service').addEventListener('click', addCustomService);
+            document.getElementById('cancel-custom-service').addEventListener('click', () => {
+                showCustomService = false;
+                renderCustomServiceForm();
+            });
+
+            // Generate Quote Button in Cart
+            document.getElementById('generate-quote-btn').addEventListener('click', generateQuote);
+
+            // Quote Overlay Buttons
+            document.getElementById('back-to-calculator-btn').addEventListener('click', () => {
+                showQuote = false;
+                activeTab = 'calculator';
+                renderApp();
+            });
+            document.getElementById('download-pdf-btn').addEventListener('click', downloadPDF);
+
+            // Client Name input in Quote Overlay
+            document.getElementById('client-name-input').addEventListener('input', (e) => {
+                clientName = e.target.value;
+            });
+
+            // Notes textarea in Quote Overlay
+            document.getElementById('quote-notes-textarea').addEventListener('input', (e) => {
+                currentNotes = e.target.value;
+            });
+
+            // Inizializza l'app al caricamento della pagina
+            renderApp();
+        });
+    </script>
+</body>
+</html>
